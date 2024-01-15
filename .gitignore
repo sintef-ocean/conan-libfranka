@@ -1,0 +1,6 @@
+*~
+*.pyc
+__pycache__
+test_package/build
+*CMakeUserPresets.json
+build

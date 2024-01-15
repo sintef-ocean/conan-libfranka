@@ -1,0 +1,55 @@
+sources:
+  "0.10.0":
+    url: "https://github.com/frankaemika/libfranka/archive/refs/tags/0.10.0.tar.gz"
+    sha256: "0fe532b1a58f04481c9dfc0a289fa49bf59f23651d60283db2f3bd4827834b24"
+  "0.9.2":
+    url: "https://github.com/frankaemika/libfranka/archive/refs/tags/0.9.2.tar.gz"
+    sha256: "5ddce13810c31b6365c43b22a08c84f4f8ad1c4d778701586e37f8810902a92a"
+  "0.8.0":
+    url: "https://github.com/frankaemika/libfranka/archive/refs/tags/0.8.0.tar.gz"
+    sha256: "10570dcfb0ed803a2e12beadaadc4ffc95104b450e6157d93cb3108820ef488a"
+  "0.7.1":
+    url: "https://github.com/frankaemika/libfranka/archive/refs/tags/0.7.1.tar.gz"
+    sha256: "6a4ad0fa9451ddc6d2a66231ee8ede3686d6e3b67fd4cd9966ba30bdc82b9408"
+patches:
+  "0.10.0":
+    - patch_file: "patches/0.10.0-0001-Make-libfranka-common-external-library-and-conanize.patch"
+      patch_description: "Do not use submodle for libfranka-common and conanize gtest Eigen3"
+      patch_type: "conan"
+  "0.9.2":
+    - patch_file: "patches/0.9.2-0001-Make-libfranka-common-external-library-and-conanize.patch"
+      patch_description: "Do not use submodle for libfranka-common and conanize gtest Eigen3"
+      patch_type: "conan"
+  "0.8.0":
+    - patch_file: "patches/0.8.0-0001-Make-libfranka-common-external-library-and-conanize.patch"
+      patch_description: "Do not use submodle for libfranka-common and conanize gtest Eigen3"
+      patch_type: "conan"
+    - patch_file: "patches/0.8.0-0002-Add-missing-headers-for-new-gcc.patch"
+      patch_description: "Add missing headers needed on newer gcc compilers"
+      patch_type: "backport"
+      patch_source: "https://github.com/frankaemika/libfranka/issues/135"
+  "0.7.1":
+    - patch_file: "patches/0.7.1-0001-Make-libfranka-common-external-library-and-conanize.patch"
+      patch_description: "Do not use submodle for libfranka-common and conanize gtest Eigen3"
+      patch_type: "conan"
+    - patch_file: "patches/0.7.1-0002-Add-missing-headers-for-new-gcc.patch"
+      patch_description: "Add missing headers needed on newer gcc compilers"
+      patch_type: "backport"
+      patch_source: "https://github.com/frankaemika/libfranka/issues/135"
+dependencies:
+  "0.10.0":
+    poco: "1.10.1"
+    gtest: "1.8.1"
+    libfranka-common: "cci.20220719"
+  "0.9.2":
+    poco: "1.10.1"
+    gtest: "1.8.1"
+    libfranka-common: "cci.20220217"
+  "0.8.0":
+    poco: "1.10.1"
+    gtest: "1.8.1"
+    libfranka-common: "cci.20191017"
+  "0.7.1":
+    poco: "1.10.1"
+    gtest: "1.8.1"
+    libfranka-common: "cci.20190513"

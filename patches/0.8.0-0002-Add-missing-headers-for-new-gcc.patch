@@ -1,0 +1,37 @@
+From 7657062e3a3d9aa9882326d2a1b01ebae5e6ebb3 Mon Sep 17 00:00:00 2001
+From: Joakim Haugen <joakim.haugen@sintef.no>
+Date: Mon, 15 Jan 2024 15:58:33 +0100
+Subject: [PATCH 2/2] Add missing headers for new gcc
+
+---
+ include/franka/control_tools.h | 1 +
+ src/control_types.cpp          | 1 +
+ 2 files changed, 2 insertions(+)
+
+diff --git a/include/franka/control_tools.h b/include/franka/control_tools.h
+index dc5017c..0bd2c30 100644
+--- a/include/franka/control_tools.h
++++ b/include/franka/control_tools.h
+@@ -4,6 +4,7 @@
+ 
+ #include <array>
+ #include <cmath>
++#include <string>
+ 
+ /**
+  * @file control_tools.h
+diff --git a/src/control_types.cpp b/src/control_types.cpp
+index 046062e..30bf76b 100644
+--- a/src/control_types.cpp
++++ b/src/control_types.cpp
+@@ -1,6 +1,7 @@
+ // Copyright (c) 2017 Franka Emika GmbH
+ // Use of this source code is governed by the Apache-2.0 license, see LICENSE
+ #include <type_traits>
++#include <stdexcept>
+ 
+ #include <franka/control_types.h>
+ 
+-- 
+2.30.2
+

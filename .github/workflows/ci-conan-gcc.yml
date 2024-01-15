@@ -1,0 +1,50 @@
+---
+name: Linux GCC
+
+on: [push, workflow_dispatch]
+
+env:
+  CONAN_UPLOAD: ${{ secrets.CONAN_URL }}
+  CONAN_PASSWORD_SINTEF: ${{ secrets.CONAN_PASSWORD }}
+  CONAN_LOGIN_USERNAME_SINTEF: ${{ secrets.CONAN_USER }}
+  CONFIG_URL: https://github.com/sintef-ocean/conan-configs.git
+
+jobs:
+  conan-with-gcc:
+    name: Conan
+    runs-on: ubuntu-22.04
+    strategy:
+      fail-fast: false
+      matrix:
+        profile: [gcc]
+        compiler_version: [10, 12]
+        build_type: [Debug, Release]
+        version: [0.7.1, 0.8.0, 0.9.2, 0.10.0]
+    container:
+      image: conanio/gcc${{ matrix.compiler_version }}-ubuntu18.04
+      options: -u 0
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install prerequisites
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y jq
+          pip3 install --upgrade setuptools pip
+          pip3 install --upgrade conan~=2.0
+      - name: Configure Conan
+        run: |
+          conan remote add sintef ${{ env.CONAN_UPLOAD }}
+          echo "package_name=$(conan inspect -f json . | jq .name -r)" >> $GITHUB_ENV
+      - name: Conan create
+        run: |
+          git config --global --add safe.directory '*'
+          conan config install ${{ env.CONFIG_URL }}  --type git -sf conan${{ matrix.conan }}
+          conan config install ${{ env.CONFIG_URL }}  --type git -sf profiles -tf profiles
+          conan create -s build_type=${{ matrix.build_type }} \
+            --user sintef --channel stable --version ${{ matrix.version }} \
+            -s compiler.version=${{ matrix.compiler_version }} \
+            -pr:b=${{ matrix.profile }} -pr:h=${{ matrix.profile }} \
+            -b missing -b outdated -b ${{ env.package_name }}* \
+            .
+      - name: Conan upload
+        run: conan upload --confirm -r sintef ${{ env.package_name }}* --force
