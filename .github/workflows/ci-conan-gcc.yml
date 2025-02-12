@@ -8,29 +8,35 @@ env:
   CONAN_PASSWORD_SINTEF: ${{ secrets.CONAN_PASSWORD }}
   CONAN_LOGIN_USERNAME_SINTEF: ${{ secrets.CONAN_USER }}
   CONFIG_URL: https://github.com/sintef-ocean/conan-configs.git
-
+  DEBIAN_FRONTEND: noninteractive
+  TZ: Etc/UTC
 jobs:
   conan-with-gcc:
     name: Conan
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     strategy:
       fail-fast: false
       matrix:
         profile: [gcc]
-        compiler_version: [10, 12]
+        compiler_version: [12]
         build_type: [Debug, Release]
         version: [0.7.1, 0.8.0, 0.9.2, 0.10.0]
+        include:
+          - linux: debian:latest
+          -
+            linux: debian:bookworm
+            compiler_version: 12
     container:
-      image: conanio/gcc${{ matrix.compiler_version }}-ubuntu18.04
+      image: ${{ matrix.linux }}
       options: -u 0
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Install prerequisites
         run: |
-          sudo apt-get update
-          sudo apt-get install -y jq
-          pip3 install --upgrade setuptools pip
-          pip3 install --upgrade conan~=2.0
+          apt-get update
+          apt-get install -y jq pipx build-essential cmake git
+          pipx install conan
+          echo "/github/home/.local/bin" >> $GITHUB_PATH
       - name: Configure Conan
         run: |
           conan remote add sintef ${{ env.CONAN_UPLOAD }}
